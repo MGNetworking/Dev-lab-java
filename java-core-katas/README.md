@@ -84,7 +84,7 @@ Certaines actions ne sont possibles que dans un état donné.
 
 ## Contraintes techniques
 
-- Langage : Java 21
+- Langage : Java 17
 - Frameworks : aucun
 - Tests : JUnit 5
 - Pas de base de données

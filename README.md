@@ -38,8 +38,7 @@ cd dev-lab-java
 ### Lancer tous les tests (tous modules)
 
 ```bash
-./mvnw test        # Linux / macOS
-mvnw.cmd test     # Windows
+./mvnw test 
 ```
 
 ### Lancer les tests d’un module spécifique
