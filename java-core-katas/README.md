@@ -27,58 +27,42 @@ L’objectif est de concevoir un modèle métier robuste, indépendant de toute 
 
 ## Périmètre fonctionnel
 
-Le système doit permettre de gérer :
+Le système gère les concepts métier suivants :
 
-`Produits`
+- Produits
+- Commandes
+- Lignes de commande
 
-Un produit possède :
-
-- un identifiant
-- un nom
-- un prix
-
-Un produit doit respecter des règles de cohérence métier (prix valide, données consistantes).
-
---- 
-
-`Commandes`
-
-Une commande :
-
-- est composée de lignes de commande
-- possède un statut représentant son cycle de vie (créée, validée, etc.)
-- dispose d’une date de création
-
-Une commande ne peut être validée que si elle respecte les règles métier définies.
-
---- 
-
-`Lignes de commande`
-
-Une ligne de commande associe :
-
-- un produit
-- une quantité
-
-Le total d’une ligne dépend du prix du produit et de la quantité.
-
---- 
-
-`Calculs métier`
-
-- Le total d’une commande correspond à la somme des totaux de ses lignes.
-- Les calculs doivent être précis et cohérents (pas de flottants approximatifs).
+Chaque concept est régi par des règles de cohérence métier.
 
 ---
+## Cas d’usage (informel)
 
-`Cycle de vie`
+Le module doit permettre :
 
-Une commande suit un cycle de vie simple :
+- Créer une commande.
+- Ajouter ou retirer des lignes de commande.
+- Calculer le total d’une commande.
+- Valider une commande.
+- Refuser toute opération non conforme aux règles métier via des exceptions.
 
-- création
-- validation
+---
+## Règles de cycle de vie (informel)
 
-Certaines actions ne sont possibles que dans un état donné.
+Une commande possède deux états :
+
+- CREATED
+- VALIDATED
+
+Transition autorisée :
+- CREATED -> VALIDATED
+
+Transitions interdites :
+- VALIDATED -> CREATED
+
+La validation d’une commande est impossible si les règles métier ne sont pas respectées
+(ex : aucune ligne, quantité invalide, prix invalide).
+
 
 ---
 
