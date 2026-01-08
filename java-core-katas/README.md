@@ -63,6 +63,28 @@ Transitions interdites :
 La validation d’une commande est impossible si les règles métier ne sont pas respectées
 (ex : aucune ligne, quantité invalide, prix invalide).
 
+---
+## Critères d’acceptation (tests)
+
+Produits
+- Un produit créé avec un prix <= 0 est refusé (exception).
+- Un produit valide est instanciable.
+
+Repository in-memory
+- Après save(product), findById(product.id) retourne le produit.
+- findById(id inconnu) retourne Optional.empty().
+
+Commandes / lignes
+- Une ligne avec quantité <= 0 est refusée (exception).
+- Le total d’une ligne = prix * quantité (BigDecimal).
+- Le total d’une commande = somme des totaux de lignes.
+
+Cycle de vie
+- Une commande nouvellement créée est en statut CREATED.
+- validate() fait passer CREATED -> VALIDATED.
+- validate() est refusée si la commande est invalide (ex: aucune ligne).
+- Toute transition interdite déclenche une exception.
+
 
 ---
 
