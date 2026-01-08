@@ -8,12 +8,11 @@ import java.util.UUID;
 
 public class Product {
 
-    private final UUID id;
+    private final UUID id = UUID.randomUUID();
     private final String name;
     private BigDecimal price;
 
-    public Product(UUID id, String name, BigDecimal price) {
-        this.id = id;
+    public Product(String name, BigDecimal price) {
         this.name = name;
         this.setPrice(price);
     }
