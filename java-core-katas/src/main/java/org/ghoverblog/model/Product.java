@@ -41,12 +41,7 @@ public class Product {
             throw new IllegalArgumentException("Le prix doit être strictement positif");
         }
 
-        try {
-            // Normalisation à 2 décimales
-            this.price = price.setScale(2, RoundingMode.HALF_UP);
-        } catch (ArithmeticException e) {
-            throw new IllegalArgumentException("Le prix doit avoir maximum 2 décimales", e);
-        }
+        this.price = price.setScale(2, RoundingMode.HALF_UP);
 
     }
 }
