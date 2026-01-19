@@ -1,4 +1,4 @@
-package org.ghoverblog;
+package org.ghoverblog.repository;
 
 import org.junit.jupiter.api.Test;
 
