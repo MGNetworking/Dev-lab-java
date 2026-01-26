@@ -30,12 +30,45 @@ L’objectif est de concevoir un modèle métier robuste, indépendant de toute 
 Le système gère les concepts métier suivants :
 
 - Produits
+    - Contient la définition du produit : identifiant, son nom et son prix
 - Commandes
+    - Contient son identifiant sont produit et sa quantité
 - Lignes de commande
+    - Contient son identifiant, sa date de création, sont status, la liste des produits et son total
 
 Chaque concept est régi par des règles de cohérence métier.
 
 ---
+
+## Responsabilités métier
+
+- Product  
+  représente un produit de catalogue
+  La modification du prix est une opération métier
+
+- OrderLine
+  représente une commande
+  Gére le cycle de vie états, transition est le point d'entrée des modifications
+  garanti le calcul totale
+
+- OrderLine
+  représente une ligne de commande
+
+- Invariants / règles de conception
+  Les identifiant doivent être immutable
+  Pas de setter public sur les éléments critique
+  Les quantités doivent être supérieur ou égale à 0
+  Toutes les modifications du model doivent respecter les règles métier définit par l'état de la commande
+
+---
+
+## Cycle de vie
+
+- Une commande nouvellement créée est en statut CREATED.
+- validate() fait passer CREATED -> VALIDATED.
+- validate() est refusée si la commande est invalide (ex: aucune ligne).
+- Toute transition interdite déclenche une exception.
+
 ## Cas d’usage (informel)
 
 Le module doit permettre :
@@ -45,46 +78,6 @@ Le module doit permettre :
 - Calculer le total d’une commande.
 - Valider une commande.
 - Refuser toute opération non conforme aux règles métier via des exceptions.
-
----
-## Règles de cycle de vie (informel)
-
-Une commande possède deux états :
-
-- CREATED
-- VALIDATED
-
-Transition autorisée :
-- CREATED -> VALIDATED
-
-Transitions interdites :
-- VALIDATED -> CREATED
-
-La validation d’une commande est impossible si les règles métier ne sont pas respectées
-(ex : aucune ligne, quantité invalide, prix invalide).
-
----
-## Critères d’acceptation (tests)
-
-Produits
-- Un produit créé avec un prix <= 0 est refusé (exception).
-- Un produit valide est instanciable.
-
-Repository in-memory
-- Après save(product), findById(product.id) retourne le produit.
-- findById(id inconnu) retourne Optional.empty().
-
-Commandes / lignes
-- Une ligne avec quantité <= 0 est refusée (exception).
-- Le total d’une ligne = prix * quantité (BigDecimal).
-- Le total d’une commande = somme des totaux de lignes.
-
-Cycle de vie
-- Une commande nouvellement créée est en statut CREATED.
-- validate() fait passer CREATED -> VALIDATED.
-- validate() est refusée si la commande est invalide (ex: aucune ligne).
-- Toute transition interdite déclenche une exception.
-
 
 ---
 
