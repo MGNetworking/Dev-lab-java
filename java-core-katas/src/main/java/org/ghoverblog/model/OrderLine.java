@@ -1,26 +1,35 @@
 package org.ghoverblog.model;
 
 import java.math.BigDecimal;
+import java.util.Objects;
+import java.util.UUID;
 
 public class OrderLine {
-
+    private final UUID id = UUID.randomUUID();
     private final Product product;
     private int quantity;
 
     public OrderLine(Product product, int quantity) {
-        this.product = product;
+        this.product = Objects.requireNonNull(product, "Le produit ne doit pas être null");
+        if (quantity < 0) throw new IllegalArgumentException("La quantité doit être >= 0");
         this.quantity = quantity;
     }
 
-    public Product getProduct() {
+    public UUID getId() {
+        return id;
+    }
+
+    Product getProduct() {
         return this.product;
     }
 
-    public void setQuantity(int quantity) {
+
+    void changeQuantity(int quantity) {
+        if (quantity < 0) throw new IllegalArgumentException("Quantity must be >= 0");
         this.quantity = quantity;
     }
 
-    public int getQuantity() {
+    int getQuantity() {
         return this.quantity;
     }
 
@@ -32,7 +41,7 @@ public class OrderLine {
      * @return montant total de la ligne, en {@link BigDecimal}
      * (non nul, valeur calculée, non stockée)
      */
-    public BigDecimal getLineTotale() {
+    BigDecimal getLineTotale() {
         return this.product.getPrice()
                 .multiply(BigDecimal.valueOf(this.quantity));
     }

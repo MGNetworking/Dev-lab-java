@@ -34,7 +34,7 @@ public class Product {
      * Scale = 2
      * Arrondi : HALF_UP
      */
-    public void setPrice(BigDecimal price) {
+    void setPrice(BigDecimal price) {
 
         Objects.requireNonNull(price, "Le prix ne peux pas être null");
         if (price.compareTo(BigDecimal.ZERO) <= 0) {

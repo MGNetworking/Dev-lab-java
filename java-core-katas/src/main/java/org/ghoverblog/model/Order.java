@@ -15,7 +15,11 @@ public class Order {
 
     public Order(String id, List<OrderLine> orderLines) {
         Objects.requireNonNull(id, "l'id order ne peux être null");
-        Objects.requireNonNull(orderLines, "La list de produit est null");
+        Objects.requireNonNull(orderLines, "La liste de produit est null");
+
+        if (orderLines.isEmpty()) {
+            throw new IllegalArgumentException("La liste de produit est vide");
+        }
 
         this.id = UUID.fromString(id);
         this.orderLines = orderLines;
@@ -38,8 +42,34 @@ public class Order {
     public void updateStatus(Status status) {
         this.status = status;
     }
+
     public BigDecimal getTotalPrice() {
         return this.totalPrice;
+    }
+
+    public void changeQuantityLine(Product product, int quantity) {
+        Objects.requireNonNull(product, "Le produit ne doit pas être null");
+        if (quantity <= 0) {
+            throw new IllegalArgumentException("La quantité doit être supérieure a 0");
+        }
+        for (OrderLine line : this.orderLines) {
+            if (line.getProduct().getId().equals(product.getId())) {
+                line.changeQuantity(quantity);
+                break;
+            }
+        }
+    }
+
+    public int getQuantityProduct(Product product) {
+
+        Objects.requireNonNull(product, "Le produit doit être présent");
+
+        for (OrderLine line : this.orderLines) {
+            if (line.getProduct().getId().equals(product.getId())) {
+                return line.getQuantity();
+            }
+        }
+        return 0;
     }
 
     /**
@@ -53,7 +83,6 @@ public class Order {
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
     }
-
 
 
 }
