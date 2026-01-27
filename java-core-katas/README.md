@@ -27,58 +27,57 @@ L’objectif est de concevoir un modèle métier robuste, indépendant de toute 
 
 ## Périmètre fonctionnel
 
-Le système doit permettre de gérer :
+Le système gère les concepts métier suivants :
 
-`Produits`
+- Produits
+    - Contient la définition du produit : identifiant, son nom et son prix
+- Commandes
+    - Contient son identifiant sont produit et sa quantité
+- Lignes de commande
+    - Contient son identifiant, sa date de création, sont status, la liste des produits et son total
 
-Un produit possède :
-
-- un identifiant
-- un nom
-- un prix
-
-Un produit doit respecter des règles de cohérence métier (prix valide, données consistantes).
-
---- 
-
-`Commandes`
-
-Une commande :
-
-- est composée de lignes de commande
-- possède un statut représentant son cycle de vie (créée, validée, etc.)
-- dispose d’une date de création
-
-Une commande ne peut être validée que si elle respecte les règles métier définies.
-
---- 
-
-`Lignes de commande`
-
-Une ligne de commande associe :
-
-- un produit
-- une quantité
-
-Le total d’une ligne dépend du prix du produit et de la quantité.
-
---- 
-
-`Calculs métier`
-
-- Le total d’une commande correspond à la somme des totaux de ses lignes.
-- Les calculs doivent être précis et cohérents (pas de flottants approximatifs).
+Chaque concept est régi par des règles de cohérence métier.
 
 ---
 
-`Cycle de vie`
+## Responsabilités métier
 
-Une commande suit un cycle de vie simple :
+- Product  
+  représente un produit de catalogue
+  La modification du prix est une opération métier
 
-- création
-- validation
+- OrderLine
+  représente une commande
+  Gére le cycle de vie états, transition est le point d'entrée des modifications
+  garanti le calcul totale
 
-Certaines actions ne sont possibles que dans un état donné.
+- OrderLine
+  représente une ligne de commande
+
+- Invariants / règles de conception
+  Les identifiant doivent être immutable
+  Pas de setter public sur les éléments critique
+  Les quantités doivent être supérieur ou égale à 0
+  Toutes les modifications du model doivent respecter les règles métier définit par l'état de la commande
+
+---
+
+## Cycle de vie
+
+- Une commande nouvellement créée est en statut CREATED.
+- validate() fait passer CREATED -> VALIDATED.
+- validate() est refusée si la commande est invalide (ex: aucune ligne).
+- Toute transition interdite déclenche une exception.
+
+## Cas d’usage (informel)
+
+Le module doit permettre :
+
+- Créer une commande.
+- Ajouter ou retirer des lignes de commande.
+- Calculer le total d’une commande.
+- Valider une commande.
+- Refuser toute opération non conforme aux règles métier via des exceptions.
 
 ---
 

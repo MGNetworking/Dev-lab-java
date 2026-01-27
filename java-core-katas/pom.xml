@@ -13,6 +13,10 @@
     <packaging>jar</packaging>
     <name>Java Core Katas</name>
 
+    <properties>
+        <maven.compiler.release>17</maven.compiler.release>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -20,15 +24,29 @@
             <version>5.11.4</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>3.26.3</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
         <plugins>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <release>${maven.compiler.release}</release>
+                    <parameters>${maven.compiler.parameters}</parameters>
+                </configuration>
+            </plugin>
+
+            <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
             </plugin>
         </plugins>
     </build>
+
 
 </project>
